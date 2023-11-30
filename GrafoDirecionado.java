@@ -1,14 +1,13 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class Grafo {
+public class GrafoDirecionado {
 
     int [] vetorPointer;
     int [] vetorArcDestino;
     int vertices;
     int arestas;
 
-    public Grafo (ArquivoGrafo arquivoGrafo){       
+    public GrafoDirecionado(ArquivoGrafo arquivoGrafo){       
         vertices = arquivoGrafo.getVertices();
         arestas = arquivoGrafo.getArestas();
         vetorArcDestino = arquivoGrafo.getVerticesDestino();
