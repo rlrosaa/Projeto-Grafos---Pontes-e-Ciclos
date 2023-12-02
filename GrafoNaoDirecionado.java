@@ -80,28 +80,40 @@ public class GrafoNaoDirecionado {
  */
     public List<int[]> encontrarPonteGrafo(int raiz){
         
-        int[][] matrizBuscaProfundidade;
-        boolean conexo;
+        int[][] matrizBuscaProfundidadeAtual;
+        int[][] matrizBuscaProfundidadeNova;
+        boolean ehPonte;
         List<int[]> listaPontes = new ArrayList<int[]>();
 
         for (int i = 1; i<=vertices;i++){
             for (int j = 1;j<=vertices;j++){
                 if(matrizAdjacencia[i][j] == 1 && i<=j){
+                    matrizBuscaProfundidadeAtual = realizaBuscaProfundidade(raiz);
                     matrizAdjacencia[i][j] = 0;
                     matrizAdjacencia[j][i] = 0;
-                    matrizBuscaProfundidade = realizaBuscaProfundidade(raiz);
-                    conexo = testaGrafoConexo (matrizBuscaProfundidade);
+                    matrizBuscaProfundidadeNova = realizaBuscaProfundidade(raiz);
+                    ehPonte = testaArestaPonte(matrizBuscaProfundidadeAtual,matrizBuscaProfundidadeNova);
                     matrizAdjacencia[i][j] = 1;
                     matrizAdjacencia[j][i] = 1;
-                    if (!conexo){
+                    if (ehPonte){
                         int [] ponte = {i,j} ;
                         listaPontes.add(ponte);
                     }
                 }
             }
         }
-        return listaPontes;     
+        return listaPontes;   
+    }
 
+    private boolean testaArestaPonte(int[][] matrizBuscaProfundidadeAtual, int[][] matrizBuscaProfundidadeNova) {
+        for (int i = 1; i<=vertices;i++){
+            if(matrizBuscaProfundidadeNova[0][i] == 0){
+                if(matrizBuscaProfundidadeAtual[0][i] != 0){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean testaGrafoConexo(int[][] matrizBuscaProfundidade) {
