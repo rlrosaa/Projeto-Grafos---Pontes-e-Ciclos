@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class GrafoNaoDirecionado {
 
@@ -24,6 +26,86 @@ public class GrafoNaoDirecionado {
             matrizAdjacencia[v2][v1] = 1;
         }       
         
+    }
+
+    /**
+     * Retorna uma matriz com os resultados da busca, sendo:
+     * linha 0 - TD
+     * linha 1 - tt
+     * linha 2 - pai
+     */
+    public int [][] realizaBuscaProfundidade(int raiz){
+
+        int [][] vetorBuscaProfundidade = new int [3][vertices + 1];
+
+        buscaProfundidade(vetorBuscaProfundidade, raiz,0);
+
+        return vetorBuscaProfundidade;
+
+    }
+
+    private int buscaProfundidade (int [][] vetorBuscaProfundidade , int no, int t){
+        t++;
+        vetorBuscaProfundidade[0][no] = t;
+        List<Integer> listaSucessores = criaListaSucessores(no);
+
+        for (int i : listaSucessores) {
+            if(vetorBuscaProfundidade[0][i] == 0){
+                //visitarArestaArvore
+                vetorBuscaProfundidade[2][i] = no;
+                t = buscaProfundidade(vetorBuscaProfundidade,i,t);
+            }
+            else if(vetorBuscaProfundidade[1][i] == 0 && vetorBuscaProfundidade[2][i] != no ){
+                //visitar aresta de retorno
+            }               
+        }
+        t++;
+        vetorBuscaProfundidade[1][no] = t;
+        return t;        
+    }
+
+    private List<Integer> criaListaSucessores(int no) {
+        List<Integer> listaSucesores = new ArrayList<Integer>();
+        for (int i = 1;i<=vertices;i++){
+            if(matrizAdjacencia[no][i] ==1)
+                listaSucesores.add(i);
+        }
+        return listaSucesores;
+    }
+
+    public String encontrarPonteGrafo(){
+        int[][] matrizBuscaProfundidade;
+        boolean conexo;
+        matrizBuscaProfundidade = realizaBuscaProfundidade(1);
+        conexo = testaGrafoConexo (matrizBuscaProfundidade);
+        if(conexo){
+            for (int i = 1; i<=vertices;i++){
+                for (int j = 1;j<=vertices;j++){
+                    if(matrizAdjacencia[i][j] == 1 && i<=j){
+                        matrizAdjacencia[i][j] = 0;
+                        matrizAdjacencia[j][i] = 0;
+                        matrizBuscaProfundidade = realizaBuscaProfundidade(1);
+                        conexo = testaGrafoConexo (matrizBuscaProfundidade);
+                        matrizAdjacencia[i][j] = 1;
+                        matrizAdjacencia[j][i] = 1;
+                        if (!conexo){
+                            return String.format("A aresta ponte do grafo é: {%s,%s}",i,j);
+                        }
+                    }
+                }
+            }
+            return "Não há ponte no grafo.";
+        }
+        return "O grafo inserido não é conexo.";
+    }
+
+    private boolean testaGrafoConexo(int[][] matrizBuscaProfundidade) {
+        for(int i =1; i<matrizBuscaProfundidade[0].length;i++){
+            if(matrizBuscaProfundidade[0][i] == 0){
+                return false;
+            }
+        }
+        return true;
     }
     
 }

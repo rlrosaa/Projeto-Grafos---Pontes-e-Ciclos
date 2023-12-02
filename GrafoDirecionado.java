@@ -67,6 +67,7 @@ public class GrafoDirecionado {
                 }
             }
         }
+        t++;
         vetorBuscaProfundidade[1][no] = t;
         return t;        
     }
