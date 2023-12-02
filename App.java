@@ -13,6 +13,5 @@ public class App {
         catch (Exception ex){
             System.out.println("Erro no arquivo");
         }
-    }
-    
+    }    
 }
