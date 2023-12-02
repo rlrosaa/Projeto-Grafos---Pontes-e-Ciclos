@@ -73,30 +73,35 @@ public class GrafoNaoDirecionado {
         return listaSucesores;
     }
 
-    public String encontrarPonteGrafo(){
+/**
+ * Encontra a ponte do grafo por metodo naive. Caso o grafo não tenha ponte, o retorno será uma lista vazia.
+ * @param raiz Deterina de qual vertice a busca será iniciada. Caso o grafo seja desconexo, a busca ocorrerá apenas no subgrafo da raiz escolhida.
+ * @return Retorna uma lista de arrays de duas posições. Cada array é uma aresta ponte. Caso não haja pontes, retorna lista vazia.
+ */
+    public List<int[]> encontrarPonteGrafo(int raiz){
+        
         int[][] matrizBuscaProfundidade;
         boolean conexo;
-        matrizBuscaProfundidade = realizaBuscaProfundidade(1);
-        conexo = testaGrafoConexo (matrizBuscaProfundidade);
-        if(conexo){
-            for (int i = 1; i<=vertices;i++){
-                for (int j = 1;j<=vertices;j++){
-                    if(matrizAdjacencia[i][j] == 1 && i<=j){
-                        matrizAdjacencia[i][j] = 0;
-                        matrizAdjacencia[j][i] = 0;
-                        matrizBuscaProfundidade = realizaBuscaProfundidade(1);
-                        conexo = testaGrafoConexo (matrizBuscaProfundidade);
-                        matrizAdjacencia[i][j] = 1;
-                        matrizAdjacencia[j][i] = 1;
-                        if (!conexo){
-                            return String.format("A aresta ponte do grafo é: {%s,%s}",i,j);
-                        }
+        List<int[]> listaPontes = new ArrayList<int[]>();
+
+        for (int i = 1; i<=vertices;i++){
+            for (int j = 1;j<=vertices;j++){
+                if(matrizAdjacencia[i][j] == 1 && i<=j){
+                    matrizAdjacencia[i][j] = 0;
+                    matrizAdjacencia[j][i] = 0;
+                    matrizBuscaProfundidade = realizaBuscaProfundidade(raiz);
+                    conexo = testaGrafoConexo (matrizBuscaProfundidade);
+                    matrizAdjacencia[i][j] = 1;
+                    matrizAdjacencia[j][i] = 1;
+                    if (!conexo){
+                        int [] ponte = {i,j} ;
+                        listaPontes.add(ponte);
                     }
                 }
             }
-            return "Não há ponte no grafo.";
         }
-        return "O grafo inserido não é conexo.";
+        return listaPontes;     
+
     }
 
     private boolean testaGrafoConexo(int[][] matrizBuscaProfundidade) {

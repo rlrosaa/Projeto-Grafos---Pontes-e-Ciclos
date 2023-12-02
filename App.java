@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class App {
 
     public static void main(String[] args) {
@@ -5,7 +7,7 @@ public class App {
         ArquivoGrafo arquivo = new ArquivoGrafo("arquivo.txt");
         GrafoNaoDirecionado grafoNaoDirecionado = new GrafoNaoDirecionado(arquivo);
         int [][] busca = grafoNaoDirecionado.realizaBuscaProfundidade(5);
-        String ponte = grafoNaoDirecionado.encontrarPonteGrafo();
+        List<int[]> ponte = grafoNaoDirecionado.encontrarPonteGrafo(1);
         int a = 1;
         }
         catch (Exception ex){
