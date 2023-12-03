@@ -8,6 +8,7 @@ public class App {
         GrafoNaoDirecionado grafoNaoDirecionado = new GrafoNaoDirecionado(arquivo);
         int [][] busca = grafoNaoDirecionado.realizaBuscaProfundidade(5);
         List<int[]> ponte = grafoNaoDirecionado.encontrarPonteGrafo(1);
+        List<Integer> b = grafoNaoDirecionado.encontrarCaminhoEulerianoFleury();
         int a = 1;
         }
         catch (Exception ex){

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GrafoNaoDirecionado {
@@ -123,6 +124,52 @@ public class GrafoNaoDirecionado {
             }
         }
         return true;
+    }
+
+    public List<Integer> encontrarCaminhoEulerianoFleury (){
+        
+        
+        int [][] matrizAdjacenciaCopia = new int[vertices+1][vertices+1];
+        List<Integer>  listasDeSucessores;
+        int contadorGrauImpar = 0;
+        
+        //Cria cópia do grafo
+        for(int i = 1;i<=vertices;i++){
+            for(int j =1;j<=vertices;j++){
+                matrizAdjacenciaCopia [i][j] = matrizAdjacencia[i][j];
+            }
+            listasDeSucessores = criaListaSucessores(i);
+            contadorGrauImpar += listasDeSucessores.size()%2 >0 ? 1 :0;
+        }
+
+        if(contadorGrauImpar >= 3)
+            return null;
+
+        List<Integer> caminhoEuleriano = new ArrayList<Integer>(vertices + 1);
+        caminhoEuleriano.add(1);
+        caminhoEuleriano = visitaArestaFleury(1, caminhoEuleriano);
+        matrizAdjacencia = matrizAdjacenciaCopia;
+        return caminhoEuleriano;
+    }
+
+    private List<Integer> visitaArestaFleury (int no,List<Integer> caminhoEuleriano){
+        
+        List<Integer>  listasDeSucessores = criaListaSucessores(no);
+        List<int []> listaPonte = encontrarPonteGrafo(no);
+
+            for (Integer sucessor : listasDeSucessores) {
+                int[] no1 = {no,sucessor};
+                int[] no2 = {sucessor,no};
+                if((listaPonte.stream().noneMatch(array -> Arrays.equals(array,no1)) && listaPonte.stream().noneMatch(array -> Arrays.equals(array,no2))) || listasDeSucessores.size() == 1 ){
+                    matrizAdjacencia[no][sucessor] = 0;
+                    matrizAdjacencia[sucessor][no] = 0;                   
+                    caminhoEuleriano.add(sucessor);
+                    caminhoEuleriano = visitaArestaFleury(sucessor, caminhoEuleriano);
+                    break;
+                }
+            }
+        
+        return caminhoEuleriano;
     }
     
 }
